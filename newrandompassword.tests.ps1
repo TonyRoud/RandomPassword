@@ -1,6 +1,3 @@
-Remove-Module RandomPassword
-Import-Module 'C:\github\RandomPassword\RandomPassword.psm1' -force
-
 # Set Regex variables
 $LCRegex   = 'a-z'
 $UCRegex   = 'A-Z'
