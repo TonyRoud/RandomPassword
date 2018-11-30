@@ -110,5 +110,10 @@ InModuleScope RandomPassword {
                 }
             }
         }
+        for ($i=1; $i -lt 5; $i++){
+            It "Should work for short passwords" {
+                $randomPassword = New-RandomPassword -length 3 -Complexity $i
+            }
+        }
     }
 }

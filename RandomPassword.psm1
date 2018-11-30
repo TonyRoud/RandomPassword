@@ -121,11 +121,13 @@ Function New-RandomPassword {
         $lengthRemaining = $lengthRemaining - $UCChars.Length
     }
 
+    if ($lengthRemaining -lt 1){ $lengthRemaining = 1}
+
     $LCChars = Get-LowerCaseChars -no $lengthRemaining
 
     $finalPassWord = $nonAlpha + $NumericChars + $UCChars + $LCChars
 
-    $Pass = (($finalPassWord.ToCharArray() | Get-Random -Count $finalPassword.Length) -join '').Replace(" ","")
+    $Pass = (($finalPassWord.ToCharArray() | Get-Random -Count $Length) -join '').Replace(" ","")
 
     $Pass | Set-ClipboardText
 
