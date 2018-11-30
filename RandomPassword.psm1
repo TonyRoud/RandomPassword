@@ -63,18 +63,30 @@ Function New-RandomPassword {
     and lowercase) the mix will be around 50/50. The password will also be copied to the clipboard.
 
     .EXAMPLE
-    New-RandomPassword -Length 10 -Complexity 4
+    New-RandomPassword -Length 10
     h73@e$bMga
+
+    The complexity will default to '4' if not specified.
 
     .EXAMPLE
     New-RandomPassword 12 3
     09tcNpsbBA
+
+    Parameters are positional (length, complexity) so you can just specify the numbers for each to shorten the command
 
     .EXAMPLE
     New-RandomPassword -length 10 -complexity 4 -Verbose
 
     VERBOSE: Password generated and copied to clipboard:
     @Wm2XxBzge
+
+    Using verbose for additional fluff.
+
+    .EXAMPLE
+    pass 10
+    h73@e$bMga
+
+    The command has been aliased to pass so the shortest version of the command is to specify the alias and length.
 
     .PARAMETER Length
         This parameter determines the length of the password string
@@ -120,4 +132,5 @@ Function New-RandomPassword {
     Write-Verbose "Password generated and copied to clipboard:"
     $pass
 }
-Export-ModuleMember -Function New-RandomPassword
+Set-Alias pass New-RandomPassword
+Export-ModuleMember -Function New-RandomPassword -Alias pass

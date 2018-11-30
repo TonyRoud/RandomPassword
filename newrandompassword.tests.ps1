@@ -1,10 +1,11 @@
+Remove-Module RandomPassword
 Import-Module 'C:\github\RandomPassword\RandomPassword.psm1' -force
 
 # Set Regex variables
 $LCRegex   = 'a-z'
 $UCRegex   = 'A-Z'
 $NUMRegex  = '0-9'
-$NANRegex = '!£$%^&*()=+@#?'
+$NANRegex = '!£$%&*=+@#?'
 $fullregex = $LCRegex,$UCRegex,$NUMRegex,$NANRegex
 
 
