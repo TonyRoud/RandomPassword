@@ -6,9 +6,16 @@ Random password generator for PowerShell
 
 This module enables you to generate random passwords of varying length and complexity.
 
-## Compatibility
+## Compatibility & Requirements
 
 The module is intended for use in PowerShell 6.0 +
+
+Also requires the clipboard ClipboardText: 
+
+```PowerShell
+
+Install-Module -Name ClipboardText
+``` 
 
 ## Instructions
 
@@ -28,3 +35,9 @@ There are 4 levels of complexity:
 4. Lowercase, uppercase, numbers and special characters.
 
 The password output by the function will be a mix that contains at least one of each type of character specified.
+
+## Examples
+
+```PowerShell
+New-RandomPassword -length 10 -complexity 4
+```
