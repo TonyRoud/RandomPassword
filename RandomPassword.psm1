@@ -54,7 +54,7 @@ function Get-LowerCaseChars {
 
     $lowerCaseChars | Get-Random -Count $no
 }
-Function Get-FullRandomPassword {
+Function New-RandomPasswordDev {
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$true,Position=1)][int]$length,
