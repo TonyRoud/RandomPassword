@@ -110,9 +110,12 @@ InModuleScope RandomPassword {
                 }
             }
         }
-        for ($i=1; $i -lt 5; $i++){
-            It "Should work for short passwords" {
-                $randomPassword = New-RandomPassword -length 3 -Complexity $i
+        It "Should support very short passwords" {
+            for ($l=1; $l -lt 5; $l++){
+                for ($i=1; $i -lt 5; $i++){
+                    $randomPassword = New-RandomPassword -length $i -Complexity $i
+                    $randomPassword.length | Should -BeExactly $i
+                }
             }
         }
     }

@@ -6,6 +6,8 @@ function Get-NonAlphaChars {
         [Parameter(Mandatory=$true,Position=2)][int]$ratio
     )
 
+    if($ratio -lt 1){$ratio = 1}
+
     $no = 1..$ratio | Get-Random
 
     $special = '!£$%&*=+@#?'
@@ -20,6 +22,8 @@ function Get-NumericChars {
         [Parameter(Mandatory=$true,Position=2)][int]$ratio
     )
 
+    if($ratio -lt 1){$ratio = 1}
+
     $no = 1..$ratio | Get-Random
 
     $numericChars = (0..9) -join ""
@@ -33,6 +37,8 @@ function Get-UpperCaseChars {
         [Parameter(Mandatory=$true,Position=1)][int]$length,
         [Parameter(Mandatory=$true,Position=2)][int]$ratio
     )
+
+    if($ratio -lt 1){$ratio = 1}
 
     $no = 1..$ratio | Get-Random
 
