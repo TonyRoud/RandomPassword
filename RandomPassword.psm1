@@ -6,9 +6,7 @@ function Get-NonAlphaChars {
         [Parameter(Mandatory=$true,Position=2)][int]$ratio
     )
 
-    $sublength = $length / $ratio
-
-    $no = 1..$sublength | Get-Random
+    $no = 1..$ratio | Get-Random
 
     $special = '!£$%&*=+@#?'
 
@@ -21,8 +19,8 @@ function Get-NumericChars {
         [Parameter(Mandatory=$true,Position=1)][int]$length,
         [Parameter(Mandatory=$true,Position=2)][int]$ratio
     )
-    $sublength = $length / $ratio
-    $no = 1..$sublength | Get-Random
+
+    $no = 1..$ratio | Get-Random
 
     $numericChars = (0..9) -join ""
 
@@ -35,9 +33,8 @@ function Get-UpperCaseChars {
         [Parameter(Mandatory=$true,Position=1)][int]$length,
         [Parameter(Mandatory=$true,Position=2)][int]$ratio
     )
-    $sublength = $length / $ratio
 
-    $no = 1..$sublength | Get-Random
+    $no = 1..$ratio | Get-Random
 
     $UpperCaseChars = ((65..90) | ForEach-Object { [char]$_ }) -join ""
 
@@ -97,17 +94,18 @@ Function New-RandomPassword {
     $LCChars      = ""
 
     $lengthRemaining = $length
+    $ratio = $length / $complexity
 
     if($complexity -gt 3) {
-        $nonAlpha = Get-NonAlphaChars -length $length -ratio 4
+        $nonAlpha = Get-NonAlphaChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $nonAlpha.Length
     }
     if($complexity -gt 2) {
-        $NumericChars = Get-NumericChars -length $length -ratio 4
+        $NumericChars = Get-NumericChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $NumericChars.Length
     }
     if($complexity -gt 1) {
-        $UCChars = Get-UpperCaseChars -length $length -ratio 3
+        $UCChars = Get-UpperCaseChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $UCChars.Length
     }
 
@@ -122,3 +120,4 @@ Function New-RandomPassword {
     Write-Verbose "Password generated and copied to clipboard:"
     $pass
 }
+Export-ModuleMember -Function New-RandomPassword
