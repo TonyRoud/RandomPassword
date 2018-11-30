@@ -2,8 +2,8 @@
 function Get-NonAlphaChars {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$true,Position=1)][int]$length,
-        [Parameter(Mandatory=$true,Position=2)][int]$ratio
+        [Parameter(Mandatory=$true,Position=0)][int]$length,
+        [Parameter(Mandatory=$true,Position=1)][int]$ratio
     )
 
     if($ratio -lt 1){$ratio = 1}
@@ -18,8 +18,8 @@ function Get-NonAlphaChars {
 function Get-NumericChars {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$true,Position=1)][int]$length,
-        [Parameter(Mandatory=$true,Position=2)][int]$ratio
+        [Parameter(Mandatory=$true,Position=0)][int]$length,
+        [Parameter(Mandatory=$true,Position=1)][int]$ratio
     )
 
     if($ratio -lt 1){$ratio = 1}
@@ -34,8 +34,8 @@ function Get-NumericChars {
 function Get-UpperCaseChars {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$true,Position=1)][int]$length,
-        [Parameter(Mandatory=$true,Position=2)][int]$ratio
+        [Parameter(Mandatory=$true,Position=0)][int]$length,
+        [Parameter(Mandatory=$true,Position=1)][int]$ratio
     )
 
     if($ratio -lt 1){$ratio = 1}
@@ -50,7 +50,7 @@ function Get-UpperCaseChars {
 function Get-LowerCaseChars {
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$true,Position=1)][int]$no
+        [Parameter(Mandatory=$true,Position=0)][int]$no
     )
 
     $LCChars = ((97..122) | ForEach-Object { [char]$_ }) -join ""
@@ -102,7 +102,9 @@ Function New-RandomPassword {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$true,Position=1)][int]$length,
+        [Parameter(Mandatory=$true,Position=0)]
+        [ValidateRange(1, [int]::MaxValue)]
+        [int]$length,
         [Parameter(Position=2)][int]$complexity = 4
     )
 

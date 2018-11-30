@@ -118,5 +118,8 @@ InModuleScope RandomPassword {
                 }
             }
         }
+        It "Should throw an error if password length is 0" {
+            { New-RandomPassword -length 0 -EA STOP } | Should -Throw "Cannot validate argument on parameter 'length'"
+        }
     }
 }
