@@ -85,7 +85,7 @@ Function New-RandomPassword {
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$true,Position=1)][int]$length,
-        [Parameter(Mandatory=$true,Position=2)][int]$complexity
+        [Parameter(Position=2)][int]$complexity = 4
     )
 
     $nonAlpha     = ""
