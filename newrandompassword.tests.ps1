@@ -21,7 +21,7 @@ Describe Get-NonAlphaChars {
         }
     }
     It "Should not contain any spaces" {
-        $CharList -match '\s' | Should -Be $false
+        $CharList -match '\s' | Should -not -Be $true
     }
     It "Length of array returned should be between 1 and $listlen" {
         $CharList.count -gt 0 -and $CharList.count -le $listlen | Should -be $true
@@ -41,7 +41,7 @@ Describe Get-UpperCaseChars {
         }
     }
     It "Should not contain any spaces" {
-        $CharList -match '\s' | Should -Be $false
+        $CharList -match '\s' | Should -not -Be $true
     }
     It "Length of array returned should be between 1 and $listlen" {
         $CharList.count -gt 0 -and $CharList.count -le $listlen | Should -be $true
@@ -57,14 +57,14 @@ Describe Get-NumericChars {
 
     It "Returns a list of numbers only" {
         $CharList | ForEach-Object {
-            [regex]::match($_,$CharList) | Should -be $true
+            [regex]::match($_,$CharList) | Should -BeTrue
         }
     }
     It "Should not contain any spaces" {
-        $CharList -match '\s' | Should -Be $false
+        $CharList -match '\s' | Should -not -Betrue
     }
     It "Length of array returned should be between 1 and $listlen" {
-        $CharList.count -gt 0 -and $CharList.count -le $listlen | Should -be $true
+        $CharList.count -gt 0 -and $CharList.count -le $listlen | Should -BeTrue
     }
 }
 Describe Get-LowerCaseChars {
@@ -75,57 +75,36 @@ Describe Get-LowerCaseChars {
 
     It "Returns a list of lower case letters only" {
         $CharList | ForEach-Object {
-            [regex]::match($_,$LCRegex) | Should -be $true
+            [regex]::match($_,$LCRegex) | Should -BeTrue
         }
     }
     It "Should not contain any spaces" {
-        $CharList -match '\s' | Should -Be $false
+        $CharList -match '\s' | Should -Not -Betrue
     }
     It "Length of array returned should be $no" {
-        $CharList.length | Should -beexactly $no
+        $CharList.length | Should -BeExactly $no
     }
 }
-Describe New-RandomPasswordDev {
+Describe New-RandomPassword {
 
     [int]$length = 10
 
     for ($i=1; $i -lt 5; $i++){
 
-        $randomPassword = New-RandomPasswordDev -length $length -Complexity $i
+        $randomPassword = New-RandomPassword -length $length -Complexity $i
 
         $regexCombo = '[' + ($fullRegex[0..($i-1)] -join '') + ']'
 
         It "Complexity $i returns password of length $length" {
-            $randomPassword.length | Should -beexactly $length
+            $randomPassword.length | Should -BeExactly $length
         }
         It "Password should not contain any spaces" {
-            $CharList -match '\s' | Should -not -be $true
+            $CharList -match '\s' | Should -Not -BeTrue
         }
         It "Complexity $i should only include the correct character types" {
             $randomPassword | ForEach-Object {
-                [regex]::match($_,$regexCombo) | Should -be $true
+                [regex]::match($_,$regexCombo) | Should -Be $true
             }
         }
-        <#
-        if($i -eq 3){
-            It "Complexity $i should not include the wrong character types" {
-                [regex]::matches($randomPassword,$NANRegex) | Should -be 0
-            }
-        }
-        elseif($i -eq 2){
-            It "Complexity $i should not include the wrong character types" {
-                [regex]::match($randomPassword,$NANRegex) | Should -not -be $true
-                [regex]::match($randomPassword,$NUMRegex) | Should -not -be $true
-            }
-        }
-        elseif($i -eq 1){
-            It "Complexity $i should not include the wrong character types" {
-                [regex]::match($randomPassword,$NANRegex) | Should -not -be $true
-                [regex]::match($randomPassword,$NUMRegex) | Should -not -be $true
-                [regex]::match($randomPassword,$UCRegex) | Should -not -be $true
-
-            }
-        }
-        #>
     }
 }

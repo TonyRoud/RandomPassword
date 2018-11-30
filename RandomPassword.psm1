@@ -10,9 +10,9 @@ function Get-NonAlphaChars {
 
     $no = 1..$sublength | Get-Random
 
-    $nonalphanumeric = '!£$%^&*()=+@#?'
+    $special = '!£$%&*=+@#?'
 
-    $nonalphanumeric.ToCharArray() | Get-Random -Count $no
+    ($special.ToCharArray() | Get-Random -Count $no) -join ""
 }
 # Function to return a specified number of numeric chars
 function Get-NumericChars {
@@ -24,9 +24,9 @@ function Get-NumericChars {
     $sublength = $length / $ratio
     $no = 1..$sublength | Get-Random
 
-    $numericChars = 0..9
+    $numericChars = (0..9) -join ""
 
-    $numericChars | Get-Random -Count $no
+    ($numericChars.ToCharArray() | Get-Random -Count $no) -join ""
 }
 # Function to return a specified number of upper case chars
 function Get-UpperCaseChars {
@@ -39,9 +39,9 @@ function Get-UpperCaseChars {
 
     $no = 1..$sublength | Get-Random
 
-    $UpperCaseChars = (65..90) | ForEach-Object { [char]$_ }
+    $UpperCaseChars = ((65..90) | ForEach-Object { [char]$_ }) -join ""
 
-    $UpperCaseChars | Get-Random -Count $no
+    ($UpperCaseChars.ToCharArray() | Get-Random -Count $no) -join ""
 }
 # Function to return a specified number of lower case chars
 function Get-LowerCaseChars {
@@ -50,35 +50,46 @@ function Get-LowerCaseChars {
         [Parameter(Mandatory=$true,Position=1)][int]$no
     )
 
-    $lowerCaseChars = (97..122) | ForEach-Object { [char]$_ }
+    $LCChars = ((97..122) | ForEach-Object { [char]$_ }) -join ""
 
-    $lowerCaseChars | Get-Random -Count $no
+    ($LCChars.ToCharArray() | Get-Random -Count $no) -join ""
 }
-Function New-RandomPasswordDev {
+Function New-RandomPassword {
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$true,Position=1)][int]$length,
         [Parameter(Mandatory=$true,Position=1)][int]$complexity
     )
 
+    $nonAlpha     = ""
+    $NumericChars = ""
+    $UCChars      = ""
+    $LCChars      = ""
+
     $lengthRemaining = $length
 
     if($complexity -gt 3) {
         $nonAlpha = Get-NonAlphaChars -length $length -ratio 4
-        $lengthRemaining = $lengthRemaining - $nonAlpha.count
+        $lengthRemaining = $lengthRemaining - $nonAlpha.Length
     }
     if($complexity -gt 2) {
         $NumericChars = Get-NumericChars -length $length -ratio 4
-        $lengthRemaining = $lengthRemaining - $NumericChars.count
+        $lengthRemaining = $lengthRemaining - $NumericChars.Length
     }
     if($complexity -gt 1) {
         $UCChars = Get-UpperCaseChars -length $length -ratio 3
-        $lengthRemaining = $lengthRemaining - $UCChars.count
+        $lengthRemaining = $lengthRemaining - $UCChars.Length
     }
 
     $LCChars = Get-LowerCaseChars -no $lengthRemaining
 
     $finalPassWord = $nonAlpha + $NumericChars + $UCChars + $LCChars
 
-    ($finalPassWord | Get-Random -Count $finalPassword.Length) -join ''
+    $Pass = (($finalPassWord.ToCharArray() | Get-Random -Count $finalPassword.Length) -join '').Replace(" ","")
+
+    $Pass | Set-ClipboardText
+
+    return $pass
+
+    Write-Host "`[ $pass `] copied to clipboard"
 }
