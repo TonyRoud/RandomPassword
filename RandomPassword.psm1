@@ -55,10 +55,40 @@ function Get-LowerCaseChars {
     ($LCChars.ToCharArray() | Get-Random -Count $no) -join ""
 }
 Function New-RandomPassword {
+    <#
+    .SYNOPSIS
+    Generates a random password of specified length and complexity, and copies it to the clipboard.
+
+    .DESCRIPTION
+    This function generates a random password composed of uppercase, lowercase, numeric and special characters.
+    The desired complexity level can be set using the -complexity parameter. The ratio of each type of character
+    in the final password will be associated to the complexity level. For example if the complexity is 2 (uppercase
+    and lowercase) the mix will be around 50/50. The password will also be copied to the clipboard.
+
+    .EXAMPLE
+    New-RandomPassword -Length 10 -Complexity 4
+    h73@e$bMga
+
+    .EXAMPLE
+    New-RandomPassword 12 3
+    09tcNpsbBA
+
+    .EXAMPLE
+    New-RandomPassword -length 10 -complexity 4 -Verbose
+
+    VERBOSE: Password generated and copied to clipboard:
+    @Wm2XxBzge
+
+    .PARAMETER Length
+        This parameter determines the length of the password string
+
+    .PARAMETER Complexity
+        This parameter determines the complexity in terms of the types of character included in the password.
+    #>
     [CmdletBinding()]
     Param(
         [Parameter(Mandatory=$true,Position=1)][int]$length,
-        [Parameter(Mandatory=$true,Position=1)][int]$complexity
+        [Parameter(Mandatory=$true,Position=2)][int]$complexity
     )
 
     $nonAlpha     = ""
@@ -89,7 +119,6 @@ Function New-RandomPassword {
 
     $Pass | Set-ClipboardText
 
-    return $pass
-
-    Write-Host "`[ $pass `] copied to clipboard"
+    Write-Verbose "Password generated and copied to clipboard:"
+    $pass
 }
