@@ -102,41 +102,46 @@ Function New-RandomPassword {
     #>
     [CmdletBinding()]
     Param(
-        [Parameter(Mandatory=$true,Position=0)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [ValidateRange(1, [int]::MaxValue)]
         [int]$length,
-        [Parameter(Position=2)][int]$complexity = 4
+        [Parameter(Position = 2)][int]$complexity = 4,
+        [Parameter()][switch]$nojumble
     )
 
-    $nonAlpha     = ""
-    $NumericChars = ""
-    $UCChars      = ""
-    $LCChars      = ""
+    $nonAlpha = ''
+    $NumericChars = ''
+    $UCChars = ''
+    $LCChars = ''
 
     $lengthRemaining = $length
     $ratio = $length / $complexity
 
-    if($complexity -gt 3) {
+    if ($complexity -gt 3) {
         $nonAlpha = Get-NonAlphaChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $nonAlpha.Length
     }
-    if($complexity -gt 2) {
+    if ($complexity -gt 2) {
         $NumericChars = Get-NumericChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $NumericChars.Length
     }
-    if($complexity -gt 1) {
+    if ($complexity -gt 1) {
         $UCChars = Get-UpperCaseChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $UCChars.Length
     }
 
-    if ($lengthRemaining -lt 1){ $lengthRemaining = 1}
+    if ($lengthRemaining -lt 1) { $lengthRemaining = 1}
 
     $LCChars = Get-LowerCaseChars -no $lengthRemaining
 
-    $finalPassWord = $nonAlpha + $NumericChars + $UCChars + $LCChars
-
-    $Pass = (($finalPassWord.ToCharArray() | Get-Random -Count $Length) -join '').Replace(" ","")
-
+    if ($nojumble) { 
+        $finalPassWord = $nonAlpha,$NumericChars,$UCChars,$LCChars
+        $Pass = ($finalPassWord | Get-Random -Count $finalPassWord.count) -join ''
+    }
+    else { 
+        $finalPassWord = $nonAlpha + $NumericChars + $UCChars + $LCChars
+        $Pass = (($finalPassWord.ToCharArray() | Get-Random -Count $Length) -join '').Replace(' ', '') 
+    }
     $Pass | Set-ClipboardText
 
     Write-Verbose "Password generated and copied to clipboard:"
