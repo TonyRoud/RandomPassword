@@ -10,12 +10,12 @@ This module enables you to generate random passwords of varying length and compl
 
 The module is intended for use in PowerShell 6.0 +
 
-Also requires the clipboard ClipboardText: 
+Also requires the clipboard ClipboardText:
 
 ```PowerShell
 
 Install-Module -Name ClipboardText
-``` 
+```
 
 ## Instructions
 
@@ -38,7 +38,7 @@ The password output by the function will be a mix that contains at least one of 
 
 ### Nojumble
 
-Use this parameter if you would like to group together characters of the same type. This will result in a slightly less secure password that may be easier to remember.
+Use this parameter if you would like to group together characters of the same type. Passwords will still meet complexity requirements but may be easier to type on mobile devices.
 
 ## Examples
 
