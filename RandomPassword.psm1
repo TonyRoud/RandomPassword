@@ -109,39 +109,31 @@ Function New-RandomPassword {
         [Parameter()][switch]$nojumble
     )
 
-    $nonAlpha = ''
-    $NumericChars = ''
-    $UCChars = ''
-    $LCChars = ''
+    $finalPassWord = @()
 
     $lengthRemaining = $length
     $ratio = $length / $complexity
 
     if ($complexity -gt 3) {
-        $nonAlpha = Get-NonAlphaChars -length $length -ratio $ratio
+        $finalPassWord  += Get-NonAlphaChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $nonAlpha.Length
     }
     if ($complexity -gt 2) {
-        $NumericChars = Get-NumericChars -length $length -ratio $ratio
+        $finalPassWord  += Get-NumericChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $NumericChars.Length
     }
     if ($complexity -gt 1) {
-        $UCChars = Get-UpperCaseChars -length $length -ratio $ratio
+        $finalPassWord  += Get-UpperCaseChars -length $length -ratio $ratio
         $lengthRemaining = $lengthRemaining - $UCChars.Length
     }
 
     if ($lengthRemaining -lt 1) { $lengthRemaining = 1}
 
-    $LCChars = Get-LowerCaseChars -no $lengthRemaining
+    $finalPassWord += Get-LowerCaseChars -no $lengthRemaining
 
-    if ($nojumble) { 
-        $finalPassWord = $nonAlpha,$NumericChars,$UCChars,$LCChars
-        $Pass = ($finalPassWord | Get-Random -Count $finalPassWord.count) -join ''
-    }
-    else { 
-        $finalPassWord = $nonAlpha + $NumericChars + $UCChars + $LCChars
-        $Pass = (($finalPassWord.ToCharArray() | Get-Random -Count $Length) -join '').Replace(' ', '') 
-    }
+    if ($nojumble) { $Pass = ($finalPassWord | Get-Random -Count $finalPassWord.count) -join '' }
+    else { $Pass = (($finalPassWord.ToCharArray() | Get-Random -Count $Length) -join '').Replace(' ','') }
+
     $Pass | Set-ClipboardText
 
     Write-Verbose "Password generated and copied to clipboard:"

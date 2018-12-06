@@ -1,5 +1,5 @@
 Remove-Module RandomPassword
-Import-Module 'D:\GitHub\RandomPassword\RandomPassword.psm1' -force
+Import-Module "C:\github\RandomPassword\RandomPassword.psm1" -force
 
 # Set Regex variables
 $LCRegex   = 'a-z'
@@ -98,19 +98,34 @@ InModuleScope RandomPassword {
 
             $regexCombo = '[' + ($fullRegex[0..($i-1)] -join '') + ']'
 
-            It "Complexity $i returns password of length $length" {
+            It "Complexity $i returns correct password length" {
                 $randomPassword.length | Should -BeExactly $length
             }
-            It "Password should not contain any spaces" {
+            It "Complexity $i Password should not contain spaces" {
                 $CharList -match '\s' | Should -Not -BeTrue
             }
-            It "Complexity $i should only include the correct character types" {
+            It "Complexity $i only includes correct character types" {
                 $randomPassword | ForEach-Object {
                     [regex]::match($_,$regexCombo) | Should -Be $true
                 }
             }
         }
-        It "Should support very short passwords" {
+        for ($i=1; $i -lt 5; $i++){
+
+            $randomPassword = New-RandomPassword -length $length -Complexity $i -nojumble
+
+            $regexCombo = '[' + ($fullRegex[0..($i-1)] -join '') + ']'
+
+            It "nojumble with complexity $i doesn't introduce any spaces" {
+                $CharList -match '\s' | Should -Not -BeTrue
+            }
+            It "nojumble with complexity $i only includes correct character types" {
+                $randomPassword | ForEach-Object {
+                    [regex]::match($_,$regexCombo) | Should -Be $true
+                }
+            }
+        }
+        It "Supports very short passwords" {
             for ($l=1; $l -lt 5; $l++){
                 for ($i=1; $i -lt 5; $i++){
                     $randomPassword = New-RandomPassword -length $i -Complexity $i
@@ -118,7 +133,7 @@ InModuleScope RandomPassword {
                 }
             }
         }
-        It "Should throw an error if password length is 0" {
+        It "Throw an error if password length is 0" {
             { New-RandomPassword -length 0 -EA STOP } | Should -Throw "Cannot validate argument on parameter 'length'"
         }
     }
