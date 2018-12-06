@@ -116,6 +116,9 @@ InModuleScope RandomPassword {
 
             $regexCombo = '[' + ($fullRegex[0..($i-1)] -join '') + ']'
 
+            It "nojumble with complexity $i returns correct password length" {
+                $randomPassword.length | Should -BeExactly $length
+            }
             It "nojumble with complexity $i doesn't introduce any spaces" {
                 $CharList -match '\s' | Should -Not -BeTrue
             }

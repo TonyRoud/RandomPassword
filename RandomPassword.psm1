@@ -115,15 +115,18 @@ Function New-RandomPassword {
     $ratio = $length / $complexity
 
     if ($complexity -gt 3) {
-        $finalPassWord  += Get-NonAlphaChars -length $length -ratio $ratio
+        $nonAlpha        = Get-NonAlphaChars -length $length -ratio $ratio
+        $finalPassWord  += $nonAlpha
         $lengthRemaining = $lengthRemaining - $nonAlpha.Length
     }
     if ($complexity -gt 2) {
-        $finalPassWord  += Get-NumericChars -length $length -ratio $ratio
+        $NumericChars    = Get-NumericChars -length $length -ratio $ratio
+        $finalPassWord  += $NumericChars
         $lengthRemaining = $lengthRemaining - $NumericChars.Length
     }
     if ($complexity -gt 1) {
-        $finalPassWord  += Get-UpperCaseChars -length $length -ratio $ratio
+        $UCChars         = Get-UpperCaseChars -length $length -ratio $ratio
+        $finalPassWord  += $UCChars
         $lengthRemaining = $lengthRemaining - $UCChars.Length
     }
 
